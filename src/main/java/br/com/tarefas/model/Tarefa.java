@@ -2,19 +2,36 @@ package br.com.tarefas.model;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "tarefas")
 public class Tarefa {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+	
+	@Column(name = "ds_tarefa", nullable = false, length = 150)
 	private String descricao;
 	
+	@Enumerated(EnumType.STRING)
 	private TarefaStatus status;
 	
 	private LocalDate dataEntrega;
 	
 	private boolean visivel;
 	
-	private TarefaCategoria categoria;
-	
-	private Usuario usuario;
+//	private TarefaCategoria categoria;
+//	
+//	private Usuario usuario;
 
 	public String getDescricao() {
 		return descricao;
@@ -48,20 +65,30 @@ public class Tarefa {
 		this.visivel = visivel;
 	}
 
-	public TarefaCategoria getCategoria() {
-		return categoria;
+//	public TarefaCategoria getCategoria() {
+//		return categoria;
+//	}
+//
+//	public void setCategoria(TarefaCategoria categoria) {
+//		this.categoria = categoria;
+//	}
+//
+//	public Usuario getUsuario() {
+//		return usuario;
+//	}
+//
+//	public void setUsuario(Usuario usuario) {
+//		this.usuario = usuario;
+//	}
+
+	public Integer getId() {
+		return id;
 	}
 
-	public void setCategoria(TarefaCategoria categoria) {
-		this.categoria = categoria;
+	public void setId(Integer id) {
+		this.id = id;
 	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+	
+	
 
 }
