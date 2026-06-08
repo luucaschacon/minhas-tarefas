@@ -9,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,9 +31,13 @@ public class Tarefa {
 	
 	private boolean visivel;
 	
-//	private TarefaCategoria categoria;
-//	
-//	private Usuario usuario;
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private TarefaCategoria categoria;
+	
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Usuario usuario;
 
 	public String getDescricao() {
 		return descricao;
@@ -65,21 +71,21 @@ public class Tarefa {
 		this.visivel = visivel;
 	}
 
-//	public TarefaCategoria getCategoria() {
-//		return categoria;
-//	}
-//
-//	public void setCategoria(TarefaCategoria categoria) {
-//		this.categoria = categoria;
-//	}
-//
-//	public Usuario getUsuario() {
-//		return usuario;
-//	}
-//
-//	public void setUsuario(Usuario usuario) {
-//		this.usuario = usuario;
-//	}
+	public TarefaCategoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(TarefaCategoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
 	public Integer getId() {
 		return id;
