@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class Usuario {
 	
 	private String senha;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
 	private List<Tarefa> tarefas;
 	
