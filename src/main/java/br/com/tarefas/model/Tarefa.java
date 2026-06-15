@@ -13,6 +13,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tarefas")
@@ -23,12 +26,15 @@ public class Tarefa {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
+	@NotBlank(message = "Campo descrição não pode estar vazio")
+	@Size(min = 5, max = 150, message = "Campo descrição deve ter entre 5 e 150 letras")
 	@Column(name = "ds_tarefa", nullable = false, length = 150)
 	private String descricao;
 	
 	@Enumerated(EnumType.STRING)
 	private TarefaStatus status;
 	
+	@FutureOrPresent(message = "Campo data de entrega deve ser uma data futura")
 	private LocalDate dataEntrega;
 	
 	private boolean visivel;

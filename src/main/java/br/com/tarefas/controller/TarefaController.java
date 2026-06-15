@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.tarefas.model.Tarefa;
 import br.com.tarefas.repository.TarefaRepository;
+import jakarta.validation.Valid;
 
 @RestController
 public class TarefaController {
@@ -36,7 +37,7 @@ public class TarefaController {
 	}
 	
 	@PostMapping("/tarefa")
-	public Tarefa salvarTarefa(@RequestBody Tarefa tarefa) {
+	public Tarefa salvarTarefa(@Valid @RequestBody Tarefa tarefa) {
 		return repositorio.save(tarefa);
 	}
 	
