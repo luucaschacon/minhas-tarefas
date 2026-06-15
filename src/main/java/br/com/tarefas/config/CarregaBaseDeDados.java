@@ -17,7 +17,7 @@ import br.com.tarefas.repository.TarefaRepository;
 import br.com.tarefas.repository.UsuarioRepository;
 
 @Configuration
-@Profile("dev")
+//@Profile("dev")
 public class CarregaBaseDeDados {
 	
 	@Autowired
