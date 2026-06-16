@@ -26,15 +26,15 @@ public class Tarefa {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	@NotBlank(message = "Campo descrição não pode estar vazio")
-	@Size(min = 5, max = 150, message = "Campo descrição deve ter entre 5 e 150 letras")
+	@NotBlank(message = "{tarefa.descricao.not-blank}")
+	@Size(min = 5, max = 150, message = "{tarefa.descricao.size}")
 	@Column(name = "ds_tarefa", nullable = false, length = 150)
 	private String descricao;
 	
 	@Enumerated(EnumType.STRING)
 	private TarefaStatus status;
 	
-	@FutureOrPresent(message = "Campo data de entrega deve ser uma data futura")
+	@FutureOrPresent(message = "{tarefa.descricao.future-or-present}")
 	private LocalDate dataEntrega;
 	
 	private boolean visivel;
