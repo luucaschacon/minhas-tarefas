@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.tarefas.controller.request.TarefaRequest;
 import br.com.tarefas.controller.response.TarefaResponse;
 import br.com.tarefas.model.Tarefa;
 import br.com.tarefas.services.TarefaService;
@@ -56,7 +57,9 @@ public class TarefaController {
 	}
 	
 	@PostMapping("/tarefa")
-	public TarefaResponse salvarTarefa(@Valid @RequestBody Tarefa tarefa) {
+	public TarefaResponse salvarTarefa(@Valid @RequestBody TarefaRequest tarefaReq) {
+		
+		Tarefa tarefa = mapper.map(tarefaReq, Tarefa.class);
 		return mapper.map(service.salvarTarefa(tarefa), TarefaResponse.class);
 	}
 	
