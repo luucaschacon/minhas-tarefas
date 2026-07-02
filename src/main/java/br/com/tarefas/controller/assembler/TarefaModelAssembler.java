@@ -16,10 +16,11 @@ import br.com.tarefas.controller.TarefaController;
 import br.com.tarefas.controller.UsuarioController;
 import br.com.tarefas.controller.response.TarefaResponse;
 import br.com.tarefas.model.Tarefa;
+import br.com.tarefas.model.TarefaStatus;
 
 @Component
 public class TarefaModelAssembler implements RepresentationModelAssembler<Tarefa, EntityModel<TarefaResponse>> {
-
+    
 	@Autowired
 	private ModelMapper mapper;
 	
@@ -32,6 +33,20 @@ public class TarefaModelAssembler implements RepresentationModelAssembler<Tarefa
 				linkTo(methodOn(TarefaController.class).todasTarefas(new HashMap<>())).withRel("tarefas"),
 				linkTo(methodOn(TarefaCategoriaController.class).umaCategoria(tarefaResp.getCategoriaId())).withRel("categoria"),
 				linkTo(methodOn(UsuarioController.class).umUsuario(tarefaResp.getUsuarioId())).withRel("usuario"));
+		
+		if(TarefaStatus.EM_ANDAMENTO.equals(tarefa.getStatus())) {
+			tarefaModel.add(
+					linkTo(methodOn(TarefaController.class).concluirTarefa(tarefa.getId())).withRel("concluir"),
+					linkTo(methodOn(TarefaController.class).cancelarTarefa(tarefa.getId())).withRel("cancelar")
+					);
+		}
+		
+		if(TarefaStatus.ABERTO.equals(tarefa.getStatus())) {
+			tarefaModel.add(
+					linkTo(methodOn(TarefaController.class).iniciarTarefa(tarefa.getId())).withRel("iniciar")
+					);
+		}
+		
 		return tarefaModel;
 	}
 
