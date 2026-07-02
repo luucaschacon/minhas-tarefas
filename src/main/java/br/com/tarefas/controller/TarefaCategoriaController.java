@@ -1,15 +1,13 @@
 package br.com.tarefas.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.tarefas.controller.assembler.TarefaCategoriaModelAssembler;
 import br.com.tarefas.controller.request.TarefaCategoriaRequest;
 import br.com.tarefas.controller.response.TarefaCategoriaResponse;
-import br.com.tarefas.controller.response.TarefaResponse;
 import br.com.tarefas.model.TarefaCategoria;
 import br.com.tarefas.services.TarefaCategoriaService;
 
@@ -34,25 +32,26 @@ public class TarefaCategoriaController {
 	@Autowired
 	private ModelMapper mapper;
 	
+	@Autowired
+	private TarefaCategoriaModelAssembler assembler;
+	
 	@GetMapping
-	public List<TarefaCategoriaResponse> todasCategorias() {
+	public CollectionModel<EntityModel<TarefaCategoriaResponse>> todasCategorias() {
 		List<TarefaCategoria> categorias = service.getTodasCategorias();
-		return categorias
+		List<EntityModel<TarefaCategoriaResponse>> categoriasModel = categorias
 				.stream()
-				.map(categoria -> mapper.map(categoria, TarefaCategoriaResponse.class))
+				.map(assembler::toModel)
 				.collect(Collectors.toList());
+		
+		return CollectionModel.of(categoriasModel, WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(TarefaCategoriaController.class).todasCategorias())
+				.withSelfRel()); 
 	}
 	
 	@GetMapping("/{id}")
-	public EntityModel<TarefaResponse> umaCategoria(@PathVariable Integer id) {
+	public EntityModel<TarefaCategoriaResponse> umaCategoria(@PathVariable Integer id) {
 		TarefaCategoria tarefa = service.getTarefaCategoriaPorId(id);
-		TarefaResponse tarefaResp = mapper.map(tarefa, TarefaResponse.class);
-		
-		EntityModel<TarefaResponse> tarefaModel = EntityModel.of(tarefaResp,
-				linkTo(methodOn(TarefaController.class).umaTarefa(id)).withSelfRel(),
-				linkTo(methodOn(TarefaController.class).todasTarefas(new HashMap<>())).withRel("tarefas"));
-		
-		return tarefaModel;
+		return assembler.toModel(tarefa);
 	}
 	
 	@PostMapping
