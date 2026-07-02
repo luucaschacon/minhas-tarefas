@@ -58,7 +58,16 @@ public class TarefaService {
 		repositorio.save(tarefa);
 		return tarefa;
 	}
-	
-	// CRIAR O METODO DE CANCELAR
+
+	public Tarefa cancelarTarefaPorId(Integer id) {
+		Tarefa tarefa = getTarefaPorId(id);
+		
+		if (!TarefaStatus.ABERTO.equals(tarefa.getStatus()))
+			throw new TarefaStatusException();
+			
+			tarefa.setStatus(TarefaStatus.CANCELADA);
+			repositorio.save(tarefa);
+			return tarefa;
+	}
 
 }

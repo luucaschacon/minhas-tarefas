@@ -35,6 +35,4 @@ public class TarefaCategoriaService {
 		repositorio.deleteById(id);
 	}
 
-	// CRIAR O METODO DE CANCELAR
-
 }
