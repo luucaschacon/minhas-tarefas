@@ -41,11 +41,11 @@ public class TarefaService {
 		Tarefa tarefa = getTarefaPorId(id);
 		
 		if (!TarefaStatus.ABERTO.equals(tarefa.getStatus()))
-			throw new TarefaStatusException(); 
+			throw new TarefaStatusException("Não é possível iniciar a tarefa com status " + tarefa.getStatus().name() ); 
 		
 		tarefa.setStatus(TarefaStatus.EM_ANDAMENTO);
-		repositorio.save(tarefa);
-		return tarefa;
+		//repositorio.save(tarefa);
+		return salvarTarefa(tarefa);
 	}
 	
 	public Tarefa concluirTarefaPorId(Integer id) {
@@ -63,7 +63,7 @@ public class TarefaService {
 		Tarefa tarefa = getTarefaPorId(id);
 		
 		if (!TarefaStatus.ABERTO.equals(tarefa.getStatus()))
-			throw new TarefaStatusException();
+			throw new TarefaStatusException("Não é possível cancelar uma tarefa concluída");
 			
 			tarefa.setStatus(TarefaStatus.CANCELADA);
 			repositorio.save(tarefa);

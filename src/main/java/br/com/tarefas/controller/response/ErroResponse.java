@@ -12,6 +12,10 @@ public class ErroResponse {
 		this.mensagem = mensagem;
 	}
 
+	public ErroResponse(String mensagem) {
+		this.mensagem = mensagem;
+	}
+
 	public String getCampo() {
 		return campo;
 	}
