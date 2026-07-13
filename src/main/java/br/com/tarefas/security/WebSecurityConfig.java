@@ -53,6 +53,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import br.com.tarefas.services.UserDetailsServiceImpl;
 
@@ -68,6 +69,11 @@ public class WebSecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    AuthTokenFilter authenticationJwtTokenFilter() {
+    	return new AuthTokenFilter();
     }
 
 //    @Bean // AUTENTICAÇÃO
@@ -100,6 +106,31 @@ public class WebSecurityConfig {
     
 
     // AUTORIZAÇÃO
+//    @Bean
+//    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//
+//        http
+//            .csrf(csrf -> csrf.disable())
+//            .cors(cors -> {})
+//            .sessionManagement(session -> session
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//            .authorizeHttpRequests(auth -> auth
+//
+//                .requestMatchers("/api/auth/**").permitAll()
+//                .requestMatchers(HttpMethod.POST, PATHS).hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.PUT, PATHS).hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.DELETE, PATHS).hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.GET, PATHS)
+//                    .hasAnyRole("ADMIN", "USER")
+//
+//                .requestMatchers("/h2-console/**").permitAll()
+//                .anyRequest().authenticated())
+//            .httpBasic(httpBasic -> {});
+//
+//        return http.build();
+//    }
+    
+ // AUTORIZAÇÃO
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -111,15 +142,18 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(auth -> auth
 
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
+
                 .requestMatchers(HttpMethod.POST, PATHS).hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, PATHS).hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, PATHS).hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, PATHS)
                     .hasAnyRole("ADMIN", "USER")
 
-                .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated())
-            .httpBasic(httpBasic -> {});
+
+            .addFilterBefore(authenticationJwtTokenFilter(),
+                    UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
